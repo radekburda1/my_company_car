@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Trash2 } from 'lucide-react';
 import { formatCurrency } from '../utils/currency';
+import './ExpenseList.css';
 
 interface Expense {
   id: string;
@@ -13,9 +14,10 @@ interface Expense {
 interface ExpenseListProps {
   expenses: Expense[];
   currency: string;
+  onDeleteExpense: (id: string) => void;
 }
 
-const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency }) => {
+const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteExpense }) => {
   const [filterCategory, setFilterCategory] = useState<string>('All');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -31,71 +33,81 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency }) => {
   }, [expenses, filterCategory, searchTerm]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <h2 className="text-xl font-bold">Expense History</h2>
+    <div className="expense-list-container">
+      <div className="expense-list-header">
+        <h2 className="expense-list-title">Expense History</h2>
         
-        <div className="flex gap-2 w-full md:w-auto">
-          <div className="relative flex-1 md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+        <div className="expense-list-controls">
+          <div className="expense-list-search-wrapper">
+            <Search className="expense-list-search-icon" size={18} />
             <input
               type="text"
               placeholder="Search expenses..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-sky-500 transition-colors"
+              className="expense-list-search-input"
             />
           </div>
           
-          <div className="relative">
+          <div className="expense-list-filter-wrapper">
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="appearance-none bg-slate-800 border border-slate-700 rounded-lg pl-4 pr-10 py-2 text-sm focus:outline-none focus:border-sky-500 transition-colors cursor-pointer"
+              className="expense-list-filter-select"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
-            <Filter className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+            <Filter className="expense-list-filter-icon" size={16} />
           </div>
         </div>
       </div>
 
-      <div className="card overflow-hidden p-0">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-800/50 text-slate-400 uppercase text-xs">
+      <div className="card expense-list-table-wrapper">
+        <div className="expense-list-table-scroll">
+          <table className="expense-list-table">
+            <thead>
               <tr>
-                <th className="px-6 py-4 font-medium">Date</th>
-                <th className="px-6 py-4 font-medium">Description</th>
-                <th className="px-6 py-4 font-medium">Category</th>
-                <th className="px-6 py-4 font-medium text-right">Amount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th className="align-right">Amount</th>
+                <th className="align-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/50">
+            <tbody>
               {filteredExpenses.length > 0 ? (
-                filteredExpenses.map((expense, index) => (
-                  <tr key={index} className="hover:bg-slate-700/20 transition-colors">
-                    <td className="px-6 py-4 text-slate-400 whitespace-nowrap">
+                filteredExpenses.map((expense) => (
+                  <tr key={expense.id}>
+                    <td className="expense-list-date">
                       {new Date(expense.date).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 font-medium text-slate-200">
+                    <td className="expense-list-description">
                       {expense.description}
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-700 text-slate-300">
+                    <td>
+                      <span className="expense-list-category-badge">
                         {expense.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right font-medium text-slate-200">
+                    <td className="expense-list-amount">
                       {formatCurrency(expense.amount, currency)}
+                    </td>
+                    <td className="expense-list-actions">
+                      <button
+                        onClick={() => onDeleteExpense(expense.id)}
+                        className="expense-list-delete-button"
+                        title="Delete expense"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={5} className="expense-list-empty">
                     No expenses found matching your criteria
                   </td>
                 </tr>

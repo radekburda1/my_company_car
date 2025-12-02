@@ -1,6 +1,7 @@
 import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import { Upload, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import './FileImporter.css';
 
 interface Expense {
   id: string;
@@ -115,10 +116,10 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="file-importer-container">
       <div className="card">
-        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <FileSpreadsheet className="text-sky-400" />
+        <h2 className="file-importer-header">
+          <FileSpreadsheet className="file-importer-header-icon" />
           Import Expenses
         </h2>
         
@@ -127,29 +128,25 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
-            isDragging 
-              ? 'border-sky-500 bg-sky-500/10' 
-              : 'border-slate-700 hover:border-slate-600 hover:bg-slate-800/50'
-          }`}
+          className={`file-importer-dropzone ${isDragging ? 'dragging' : ''}`}
         >
           <input
             type="file"
             ref={fileInputRef}
             onChange={handleFileSelect}
             accept=".xlsx,.xls,.csv"
-            className="hidden"
+            className="file-importer-input"
           />
           
-          <div className="flex flex-col items-center gap-3">
-            <div className={`p-4 rounded-full ${isDragging ? 'bg-sky-500/20 text-sky-400' : 'bg-slate-800 text-slate-400'}`}>
+          <div className="file-importer-content">
+            <div className={`file-importer-icon ${isDragging ? 'dragging' : ''}`}>
               <Upload size={32} />
             </div>
             <div>
-              <p className="text-lg font-medium text-slate-200">
+              <p className="file-importer-text-primary">
                 Drop your Excel file here
               </p>
-              <p className="text-sm text-slate-500 mt-1">
+              <p className="file-importer-text-secondary">
                 or click to browse
               </p>
             </div>
@@ -157,22 +154,22 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
         </div>
 
         {error && (
-          <div className="mt-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center gap-2 text-rose-400 text-sm">
+          <div className="file-importer-message file-importer-error">
             <AlertCircle size={16} />
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-emerald-400 text-sm">
+          <div className="file-importer-message file-importer-success">
             <Check size={16} />
             Successfully imported expenses!
           </div>
         )}
 
-        <div className="mt-6 text-xs text-slate-500">
-          <p className="font-medium mb-1">Supported Columns:</p>
-          <ul className="list-disc list-inside space-y-1">
+        <div className="file-importer-info">
+          <p className="file-importer-info-title">Supported Columns:</p>
+          <ul className="file-importer-info-list">
             <li>Date (required)</li>
             <li>Amount (required)</li>
             <li>Category (optional)</li>

@@ -1,0 +1,78 @@
+/* Layout Component Styles */
+
+.layout-container {
+    min-height: 100vh;
+    background-color: #020617;
+    color: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-container ::selection {
+    background-color: rgba(56, 189, 248, 0.3);
+}
+
+.layout-header {
+    background-color: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.layout-header-content {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.layout-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.layout-logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background-color: #0ea5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.2);
+}
+
+.layout-logo-icon-inner {
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: white;
+    border-radius: 9999px;
+    opacity: 0.2;
+}
+
+.layout-logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.025em;
+}
+
+.layout-main {
+    flex: 1;
+    max-width: 72rem;
+    margin: 0 auto;
+    width: 100%;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    .layout-main {
+        padding: 1.5rem;
+    }
+}

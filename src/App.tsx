@@ -21,7 +21,9 @@ interface SettingsData {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    return localStorage.getItem('activeTab') || 'dashboard';
+  });
   
   // State
   const [expenses, setExpenses] = useState<Expense[]>(() => {
@@ -39,6 +41,10 @@ function App() {
   });
 
   // Persistence
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
+
   useEffect(() => {
     localStorage.setItem('expenses', JSON.stringify(expenses));
   }, [expenses]);
@@ -61,6 +67,12 @@ function App() {
   const handleUpdateSettings = (newSettings: SettingsData) => {
     setSettings(newSettings);
     alert('Settings saved successfully!');
+  };
+
+  const handleDeleteExpense = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this expense?')) {
+      setExpenses(prev => prev.filter(expense => expense.id !== id));
+    }
   };
 
   const handleClearData = () => {
@@ -87,7 +99,7 @@ function App() {
           />
         );
       case 'expenses':
-        return <ExpenseList expenses={expenses} currency={settings.currency} />;
+        return <ExpenseList expenses={expenses} currency={settings.currency} onDeleteExpense={handleDeleteExpense} />;
       case 'add':
         return (
           <div className="space-y-8">

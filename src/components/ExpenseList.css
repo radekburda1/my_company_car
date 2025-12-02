@@ -1,0 +1,207 @@
+/* ExpenseList Component Styles */
+
+.expense-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.expense-list-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .expense-list-header {
+        flex-direction: row;
+    }
+}
+
+.expense-list-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.expense-list-controls {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .expense-list-controls {
+        width: auto;
+    }
+}
+
+.expense-list-search-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+@media (min-width: 768px) {
+    .expense-list-search-wrapper {
+        width: 16rem;
+    }
+}
+
+.expense-list-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.expense-list-search-input {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding-left: 2.5rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+    color: #f1f5f9;
+}
+
+.expense-list-search-input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+}
+
+.expense-list-filter-wrapper {
+    position: relative;
+}
+
+.expense-list-filter-select {
+    appearance: none;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 2.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+    cursor: pointer;
+    color: #f1f5f9;
+}
+
+.expense-list-filter-select:focus {
+    outline: none;
+    border-color: #0ea5e9;
+}
+
+.expense-list-filter-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.expense-list-table-wrapper {
+    overflow: hidden;
+    padding: 0;
+}
+
+.expense-list-table-scroll {
+    overflow-x: auto;
+}
+
+.expense-list-table {
+    width: 100%;
+    text-align: left;
+    font-size: 0.875rem;
+}
+
+.expense-list-table thead {
+    background-color: rgba(30, 41, 59, 0.5);
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.expense-list-table th {
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+}
+
+.expense-list-table th.align-right {
+    text-align: right;
+}
+
+.expense-list-table tbody {
+    border-top: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.expense-list-table tbody tr {
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    transition: background-color 0.2s;
+}
+
+.expense-list-table tbody tr:hover {
+    background-color: rgba(51, 65, 85, 0.2);
+}
+
+.expense-list-table td {
+    padding: 1rem 1.5rem;
+}
+
+.expense-list-date {
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.expense-list-description {
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.expense-list-category-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+.expense-list-amount {
+    text-align: right;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.expense-list-actions {
+    text-align: right;
+}
+
+.expense-list-delete-button {
+    color: #94a3b8;
+    transition: color 0.2s;
+    padding: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.expense-list-delete-button:hover {
+    color: #f87171;
+}
+
+.expense-list-empty {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: #64748b;
+}

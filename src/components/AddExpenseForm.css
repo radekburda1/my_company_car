@@ -1,0 +1,103 @@
+/* AddExpenseForm Component Styles */
+
+.add-expense-container {
+    max-width: 36rem;
+    margin: 0 auto;
+}
+
+.add-expense-header {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-expense-header-icon {
+    color: #38bdf8;
+}
+
+.add-expense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.add-expense-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-expense-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.add-expense-input,
+.add-expense-select {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: #e2e8f0;
+    transition: border-color 0.2s;
+}
+
+.add-expense-input:focus,
+.add-expense-select:focus {
+    outline: none;
+    border-color: #0ea5e9;
+}
+
+.add-expense-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.add-expense-amount-wrapper {
+    position: relative;
+}
+
+.add-expense-currency-symbol {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+
+.add-expense-amount-input {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color: #e2e8f0;
+    transition: border-color 0.2s;
+}
+
+.add-expense-amount-input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+}
+
+.add-expense-submit {
+    padding-top: 1rem;
+}
+
+.add-expense-submit-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}

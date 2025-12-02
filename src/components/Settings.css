@@ -1,0 +1,132 @@
+/* Settings Component Styles */
+
+.settings-container {
+    max-width: 36rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.settings-header {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.settings-input,
+.settings-select {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: #e2e8f0;
+    transition: border-color 0.2s;
+}
+
+.settings-input:focus,
+.settings-select:focus {
+    outline: none;
+    border-color: #0ea5e9;
+}
+
+.settings-amount-wrapper {
+    position: relative;
+}
+
+.settings-currency-symbol {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+
+.settings-amount-input {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.5rem;
+    padding-left: 2.5rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color: #e2e8f0;
+    transition: border-color 0.2s;
+}
+
+.settings-amount-input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+}
+
+.settings-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+.settings-submit {
+    padding-top: 0.5rem;
+}
+
+.settings-submit-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.settings-danger-zone {
+    border-color: rgba(136, 19, 55, 0.5);
+    background-color: rgba(76, 5, 25, 0.1);
+}
+
+.settings-danger-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #fb7185;
+    margin-bottom: 0.5rem;
+}
+
+.settings-danger-description {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.settings-danger-button {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(244, 63, 94, 0.5);
+    color: #fb7185;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    cursor: pointer;
+}
+
+.settings-danger-button:hover {
+    background-color: rgba(244, 63, 94, 0.1);
+}

@@ -205,3 +205,105 @@
     text-align: center;
     color: #64748b;
 }
+
+/* Edit Mode Styles */
+
+.expense-list-table tbody tr.editing {
+    background-color: rgba(14, 165, 233, 0.1);
+}
+
+.expense-list-table tbody tr.editing:hover {
+    background-color: rgba(14, 165, 233, 0.15);
+}
+
+.expense-list-edit-input,
+.expense-list-edit-select {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #0ea5e9;
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.5rem;
+    color: #f1f5f9;
+    font-size: 0.875rem;
+}
+
+.expense-list-edit-input:focus,
+.expense-list-edit-select:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+
+.expense-list-edit-amount-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.expense-list-edit-currency {
+    position: absolute;
+    left: 0.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.expense-list-edit-amount-input {
+    width: 100%;
+    background-color: #1e293b;
+    border: 1px solid #0ea5e9;
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.5rem 0.375rem 1.75rem;
+    color: #f1f5f9;
+    font-size: 0.875rem;
+    text-align: right;
+}
+
+.expense-list-edit-amount-input:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+
+.expense-list-action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.expense-list-edit-button {
+    color: #94a3b8;
+    transition: color 0.2s;
+    padding: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.expense-list-edit-button:hover {
+    color: #38bdf8;
+}
+
+.expense-list-save-button {
+    color: #94a3b8;
+    transition: color 0.2s;
+    padding: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.expense-list-save-button:hover {
+    color: #4ade80;
+}
+
+.expense-list-cancel-button {
+    color: #94a3b8;
+    transition: color 0.2s;
+    padding: 0.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.expense-list-cancel-button:hover {
+    color: #f87171;
+}

@@ -70,9 +70,13 @@ function App() {
   };
 
   const handleDeleteExpense = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this expense?')) {
-      setExpenses(prev => prev.filter(expense => expense.id !== id));
-    }
+    setExpenses(prev => prev.filter(expense => expense.id !== id));
+  };
+
+  const handleUpdateExpense = (updatedExpense: Expense) => {
+    setExpenses(prev => prev.map(expense => 
+      expense.id === updatedExpense.id ? updatedExpense : expense
+    ));
   };
 
   const handleClearData = () => {
@@ -99,14 +103,12 @@ function App() {
           />
         );
       case 'expenses':
-        return <ExpenseList expenses={expenses} currency={settings.currency} onDeleteExpense={handleDeleteExpense} />;
+        return <ExpenseList expenses={expenses} currency={settings.currency} onDeleteExpense={handleDeleteExpense} onUpdateExpense={handleUpdateExpense} />;
       case 'add':
         return (
           <div className="space-y-8">
             <AddExpenseForm onAddExpense={handleAddExpense} currency={settings.currency} />
-            <div className="flex items-center justify-center">
-              <span className="text-slate-600 text-sm uppercase tracking-wider font-medium">Or Import Data</span>
-            </div>
+              <br></br>
             <FileImporter onImport={handleImportExpenses} />
           </div>
         );

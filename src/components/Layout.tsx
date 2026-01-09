@@ -32,14 +32,14 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTa
           <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
           {user && (
-            <div className="flex items-center gap-4 ml-auto">
-              <span className="text-sm font-medium text-slate-600">
+            <div className="layout-user-section">
+              <span className="layout-user-name">
                 {user.username}
               </span>
               {onLogout && (
                 <button
                   onClick={onLogout}
-                  className="text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                  className="layout-logout-button"
                 >
                   Sign Out
                 </button>

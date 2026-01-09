@@ -1,16 +1,18 @@
-const express = require('express');
+import express, { Response, NextFunction } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User, { IUser } from '../models/User';
+import { AuthRequest } from '../types/express';
+
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
 // Middleware to verify token
-const auth = (req, res, next) => {
+const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
   const token = req.header('x-auth-token');
   if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
     req.user = decoded.user;
     next();
   } catch (err) {
@@ -21,7 +23,7 @@ const auth = (req, res, next) => {
 // @route   POST api/auth/register
 // @desc    Register a user
 // @access  Public
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: AuthRequest, res: Response) => {
   const { username, password } = req.body;
 
   try {
@@ -34,11 +36,11 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     const payload = { user: { id: user.id } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
       res.json({ token, user: { id: user.id, username: user.username, settings: user.settings } });
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
@@ -47,11 +49,11 @@ router.post('/register', async (req, res) => {
 // @route   POST api/auth/login
 // @desc    Authenticate user & get token
 // @access  Public
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: AuthRequest, res: Response) => {
   const { username, password } = req.body;
 
   try {
-    let user = await User.findOne({ username });
+    const user = await User.findOne({ username }) as IUser;
     if (!user) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
     }
@@ -62,11 +64,11 @@ router.post('/login', async (req, res) => {
     }
 
     const payload = { user: { id: user.id } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+    jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
       res.json({ token, user: { id: user.id, username: user.username, settings: user.settings } });
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
@@ -75,11 +77,12 @@ router.post('/login', async (req, res) => {
 // @route   GET api/auth/me
 // @desc    Get logged in user
 // @access  Private
-router.get('/me', auth, async (req, res) => {
+router.get('/me', auth, async (req: AuthRequest, res: Response) => {
   try {
+    if (!req.user) return res.status(401).json({ msg: 'Authorized denied' });
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
@@ -88,8 +91,9 @@ router.get('/me', auth, async (req, res) => {
 // @route   PUT api/auth/settings
 // @desc    Update user settings
 // @access  Private
-router.put('/settings', auth, async (req, res) => {
+router.put('/settings', auth, async (req: AuthRequest, res: Response) => {
   try {
+    if (!req.user) return res.status(401).json({ msg: 'Authorized denied' });
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ msg: 'User not found' });
 
@@ -102,10 +106,11 @@ router.put('/settings', auth, async (req, res) => {
     await user.save();
 
     res.json(user.settings);
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
 });
 
-module.exports = router;
+export { auth };
+export default router;

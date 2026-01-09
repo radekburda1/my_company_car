@@ -3,6 +3,7 @@ import { Search, Filter, Trash2, Edit2, Check, X } from 'lucide-react';
 import { formatCurrency } from '../utils/currency';
 import { CURRENCIES } from '../utils/currency';
 import ConfirmDialog from './ConfirmDialog';
+import { EXPENSE_CATEGORIES } from '../constants/categories';
 import './ExpenseList.css';
 
 interface Expense {
@@ -30,8 +31,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteE
     expenseId: null
   });
 
-  const categories = ['All', ...new Set(expenses.map(e => e.category))];
-  const expenseCategories = ['Fuel', 'Maintenance', 'Insurance', 'Tax', 'Parking', 'Tolls', 'Other'];
+  const categories = ['All', ...EXPENSE_CATEGORIES];
 
   const filteredExpenses = useMemo(() => {
     return expenses.filter(expense => {
@@ -165,7 +165,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteE
                             onChange={(e) => handleEditFormChange('category', e.target.value)}
                             className="expense-list-edit-select"
                           >
-                            {expenseCategories.map(cat => (
+                            {EXPENSE_CATEGORIES.map(cat => (
                               <option key={cat} value={cat}>{cat}</option>
                             ))}
                           </select>
@@ -181,7 +181,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteE
                             <span className="expense-list-edit-currency">{selectedCurrency.symbol}</span>
                             <input
                               type="number"
-                              step="0.01"
+                              step={selectedCurrency.step}
                               min="0"
                               value={editForm.amount}
                               onChange={(e) => handleEditFormChange('amount', parseFloat(e.target.value))}

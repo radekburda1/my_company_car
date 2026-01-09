@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { PlusCircle } from 'lucide-react';
 import { CURRENCIES } from '../utils/currency';
+import { EXPENSE_CATEGORIES } from '../constants/categories';
 import './AddExpenseForm.css';
 
 interface Expense {
@@ -20,11 +21,10 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     description: '',
-    category: 'Palivo',
+    category: EXPENSE_CATEGORIES[0] as string,
     amount: ''
   });
 
-  const categories = ['Palivo', 'Servis', 'Pojištění', 'Parkování', 'Poplatky', 'Drobnosti'];
   const selectedCurrency = CURRENCIES[currency] || CURRENCIES.CZK;
 
   const handleSubmit = (e: FormEvent) => {
@@ -40,7 +40,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
     setFormData({
       date: new Date().toISOString().split('T')[0],
       description: '',
-      category: 'Palivo',
+      category: EXPENSE_CATEGORIES[0],
       amount: ''
     });
   };
@@ -85,7 +85,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="add-expense-select"
               >
-                {categories.map(cat => (
+                {EXPENSE_CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
@@ -98,9 +98,9 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
                 <input
                   type="number"
                   required
-                  step="0.01"
+                  step={selectedCurrency.step}
                   min="0"
-                  placeholder="0.00"
+                  placeholder="0"
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                   className="add-expense-amount-input"

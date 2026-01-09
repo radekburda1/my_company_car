@@ -40,6 +40,8 @@
 .expense-list-search-wrapper {
     position: relative;
     flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 @media (min-width: 768px) {
@@ -65,8 +67,9 @@
     padding-right: 1rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    min-height: 2.5rem;
     font-size: 0.875rem;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
     color: #f1f5f9;
 }
 
@@ -80,32 +83,11 @@
 }
 
 .expense-list-filter-select {
-    appearance: none;
-    background-color: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 0.5rem;
-    padding-left: 1rem;
-    padding-right: 2.5rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 0.875rem;
-    transition: border-color 0.2s;
-    cursor: pointer;
-    color: #f1f5f9;
+    width: auto;
 }
 
 .expense-list-filter-select:focus {
     outline: none;
-    border-color: #0ea5e9;
-}
-
-.expense-list-filter-icon {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    pointer-events: none;
 }
 
 .expense-list-table-wrapper {
@@ -137,6 +119,26 @@
 
 .expense-list-table th.align-right {
     text-align: right;
+}
+
+.col-date {
+    width: 120px;
+}
+
+.col-description {
+    width: auto;
+}
+
+.col-category {
+    width: 160px;
+}
+
+.col-amount {
+    width: 120px;
+}
+
+.col-actions {
+    width: 100px;
 }
 
 .expense-list-table tbody {

@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, Trash2, Edit2, Check, X } from 'lucide-react';
+import { Search, Trash2, Edit2, Check, X } from 'lucide-react';
 import { formatCurrency } from '../utils/currency';
 import { CURRENCIES } from '../utils/currency';
 import ConfirmDialog from './ConfirmDialog';
 import { EXPENSE_CATEGORIES } from '../constants/categories';
+import { Select } from './ui/Select';
 import './ExpenseList.css';
 
 interface Expense {
@@ -99,16 +100,12 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteE
           </div>
           
           <div className="expense-list-filter-wrapper">
-            <select
+            <Select
+              options={categories}
               value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
+              onChange={(val) => setFilterCategory(val)}
               className="expense-list-filter-select"
-            >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-            <Filter className="expense-list-filter-icon" size={16} />
+            />
           </div>
         </div>
       </div>
@@ -118,11 +115,11 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteE
           <table className="expense-list-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th className="align-right">Amount</th>
-                <th className="align-right">Actions</th>
+                <th className="col-date">Date</th>
+                <th className="col-description">Description</th>
+                <th className="col-category">Category</th>
+                <th className="col-amount align-right">Amount</th>
+                <th className="col-actions align-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -160,15 +157,13 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, currency, onDeleteE
                       </td>
                       <td>
                         {isEditing && editForm ? (
-                          <select
-                            value={editForm.category}
-                            onChange={(e) => handleEditFormChange('category', e.target.value)}
-                            className="expense-list-edit-select"
-                          >
-                            {EXPENSE_CATEGORIES.map(cat => (
-                              <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                          </select>
+                          <div className="expense-list-edit-select-container">
+                            <Select
+                              options={EXPENSE_CATEGORIES}
+                              value={editForm.category}
+                              onChange={(val) => handleEditFormChange('category', val)}
+                            />
+                          </div>
                         ) : (
                           <span className="expense-list-category-badge">
                             {expense.category}

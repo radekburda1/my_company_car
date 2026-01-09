@@ -43,12 +43,18 @@ const Login: React.FC = () => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <div className="login-icon-wrapper">
-            <Lock className="login-icon" size={32} />
+          <div className="login-brand">
+            <div className="login-logo-wrapper">
+              <img src="/logo.png" alt="CarTracker Logo" className="login-logo-img" />
+            </div>
+            <h1 className="login-brand-text">
+              <span className="text-car">Car</span>
+              <span className="text-tracker">Tracker</span>
+            </h1>
           </div>
-          <h1 className="login-title">
+          <h2 className="login-title">
             {isLogin ? 'Welcome Back' : 'Create Account'}
-          </h1>
+          </h2>
           <p className="login-subtitle">
             {isLogin ? 'Sign in to manage your car tracker' : 'Sign up to get started today'}
           </p>

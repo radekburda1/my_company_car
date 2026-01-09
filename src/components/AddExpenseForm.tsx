@@ -2,6 +2,7 @@ import React, { useState, FormEvent } from 'react';
 import { PlusCircle } from 'lucide-react';
 import { CURRENCIES } from '../utils/currency';
 import { EXPENSE_CATEGORIES } from '../constants/categories';
+import { Select } from './ui/Select';
 import './AddExpenseForm.css';
 
 interface Expense {
@@ -80,15 +81,11 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
           <div className="add-expense-grid">
             <div className="add-expense-field">
               <label className="add-expense-label">Category</label>
-              <select
+              <Select
+                options={EXPENSE_CATEGORIES}
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="add-expense-select"
-              >
-                {EXPENSE_CATEGORIES.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+                onChange={(val) => setFormData({ ...formData, category: val })}
+              />
             </div>
 
             <div className="add-expense-field">

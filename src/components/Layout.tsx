@@ -22,10 +22,11 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTa
         <div className="layout-header-content">
           <div className="layout-logo">
             <div className="layout-logo-icon">
-              <div className="layout-logo-icon-inner" />
+              <img src="/logo.png" alt="CarTracker Logo" className="layout-logo-img" />
             </div>
             <h1 className="layout-logo-text">
-              CarTracker
+              <span className="text-car">Car</span>
+              <span className="text-tracker">Tracker</span>
             </h1>
           </div>
           

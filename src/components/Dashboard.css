@@ -138,3 +138,35 @@
     font-weight: 700;
     color: #f1f5f9;
 }
+
+.dashboard-chart-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.dashboard-chart-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-chart-wrapper {
+    width: 100%;
+    height: 300px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-chart-card {
+        padding: 1.5rem;
+    }
+
+    .dashboard-chart-wrapper {
+        height: 250px;
+    }
+}

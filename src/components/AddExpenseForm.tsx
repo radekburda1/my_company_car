@@ -20,11 +20,11 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     description: '',
-    category: 'Fuel',
+    category: 'Palivo',
     amount: ''
   });
 
-  const categories = ['Fuel', 'Maintenance', 'Insurance', 'Tax', 'Parking', 'Tolls', 'Other'];
+  const categories = ['Palivo', 'Servis', 'Pojištění', 'Parkování', 'Poplatky', 'Drobnosti'];
   const selectedCurrency = CURRENCIES[currency] || CURRENCIES.CZK;
 
   const handleSubmit = (e: FormEvent) => {
@@ -40,7 +40,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onAddExpense, currency 
     setFormData({
       date: new Date().toISOString().split('T')[0],
       description: '',
-      category: 'Fuel',
+      category: 'Palivo',
       amount: ''
     });
   };

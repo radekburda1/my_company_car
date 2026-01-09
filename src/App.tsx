@@ -7,6 +7,7 @@ import Settings from './components/Settings';
 import FileImporter from './components/FileImporter';
 import Login from './components/Login';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Expense {
   id: string; // Will correspond to _id from MongoDB but mapped to id
@@ -75,9 +76,11 @@ const AuthenticatedApp: React.FC = () => {
         const savedExpense = await res.json();
         setExpenses(prev => [savedExpense, ...prev]);
         setActiveTab('expenses');
+        toast.success('Expense added successfully!');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to add expense", err);
+      toast.error('Failed to add expense');
     }
   };
 
@@ -124,10 +127,11 @@ const AuthenticatedApp: React.FC = () => {
         const updated = await res.json();
         setSettings(updated);
         updateSettings(updated);
-        alert('Settings saved successfully!');
+        toast.success('Settings saved successfully!');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to update settings", err);
+      toast.error(err.message || 'Failed to update settings');
     }
   };
 
@@ -140,9 +144,11 @@ const AuthenticatedApp: React.FC = () => {
       });
       if (res.ok) {
         setExpenses(prev => prev.filter(expense => expense.id !== id));
+        toast.success('Expense deleted');
       }
     } catch (err) {
       console.error("Failed to delete expense", err);
+      toast.error('Failed to delete expense');
     }
   };
 
@@ -163,9 +169,11 @@ const AuthenticatedApp: React.FC = () => {
         setExpenses(prev => prev.map(expense => 
           expense.id === saved.id ? saved : expense
         ));
+        toast.success('Expense updated');
       }
     } catch (err) {
       console.error("Failed to update expense", err);
+      toast.error('Failed to update expense');
     }
   };
 
@@ -224,6 +232,17 @@ const AuthenticatedApp: React.FC = () => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          className: 'premium-toast',
+          style: {
+            background: '#1e293b',
+            color: '#f8fafc',
+            border: '1px solid #334155',
+          },
+        }}
+      />
       <AppContent />
     </AuthProvider>
   );

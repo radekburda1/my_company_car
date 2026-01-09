@@ -5,9 +5,11 @@ import ExpenseList from './components/ExpenseList';
 import AddExpenseForm from './components/AddExpenseForm';
 import Settings from './components/Settings';
 import FileImporter from './components/FileImporter';
+import Login from './components/Login';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 interface Expense {
-  id: string;
+  id: string; // Will correspond to _id from MongoDB but mapped to id
   date: string;
   amount: number;
   category: string;
@@ -20,75 +22,155 @@ interface SettingsData {
   currency: string;
 }
 
-function App() {
-  const [activeTab, setActiveTab] = useState<string>(() => {
-    return localStorage.getItem('activeTab') || 'dashboard';
-  });
-  
-  // State
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    const saved = localStorage.getItem('expenses');
-    return saved ? JSON.parse(saved) : [];
+const AuthenticatedApp: React.FC = () => {
+  const { user, logout, updateSettings } = useAuth();
+  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [settings, setSettings] = useState<SettingsData>({
+    allowance: user?.settings.allowance || 500,
+    startDate: user?.settings.startDate || new Date().toISOString().split('T')[0],
+    currency: user?.settings.currency || 'CZK'
   });
 
-  const [settings, setSettings] = useState<SettingsData>(() => {
-    const saved = localStorage.getItem('settings');
-    return saved ? JSON.parse(saved) : {
-      allowance: 500, // Default
-      startDate: new Date().toISOString().split('T')[0],
-      currency: 'CZK'
+  // Sync settings from user context
+  useEffect(() => {
+    if (user && user.settings) {
+      setSettings(user.settings);
+    }
+  }, [user]);
+
+  // Fetch expenses
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('/api/transactions', {
+          headers: { 'x-auth-token': token || '' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          // Transform _id to id if needed, though our backend does it
+          setExpenses(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch expenses", err);
+      }
     };
-  });
+    fetchExpenses();
+  }, []);
 
-  // Persistence
-  useEffect(() => {
-    localStorage.setItem('activeTab', activeTab);
-  }, [activeTab]);
+  const handleAddExpense = async (newExpense: Expense) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token || ''
+        },
+        body: JSON.stringify(newExpense)
+      });
+      
+      if (res.ok) {
+        const savedExpense = await res.json();
+        setExpenses(prev => [savedExpense, ...prev]);
+        setActiveTab('expenses');
+      }
+    } catch (err) {
+      console.error("Failed to add expense", err);
+    }
+  };
 
-  useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]);
+  const handleImportExpenses = async (importedExpenses: Expense[]) => {
+    // Process one by one or batch if backend supports it. For now, one by one simple loop
+    const token = localStorage.getItem('token');
+    const savedExpenses: Expense[] = [];
 
-  useEffect(() => {
-    localStorage.setItem('settings', JSON.stringify(settings));
-  }, [settings]);
+    for (const expense of importedExpenses) {
+      try {
+         const res = await fetch('/api/transactions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token || ''
+          },
+          body: JSON.stringify(expense)
+        });
+        if (res.ok) {
+          savedExpenses.push(await res.json());
+        }
+      } catch (err) {
+        console.error("Failed to import expense", expense);
+      }
+    }
 
-  // Handlers
-  const handleAddExpense = (newExpense: Expense) => {
-    setExpenses(prev => [newExpense, ...prev]);
+    setExpenses(prev => [...savedExpenses, ...prev]);
     setActiveTab('expenses');
   };
 
-  const handleImportExpenses = (importedExpenses: Expense[]) => {
-    setExpenses(prev => [...importedExpenses, ...prev]);
-    setActiveTab('expenses');
+  const handleUpdateSettings = async (newSettings: SettingsData) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/auth/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token || ''
+        },
+        body: JSON.stringify(newSettings)
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setSettings(updated);
+        updateSettings(updated);
+        alert('Settings saved successfully!');
+      }
+    } catch (err) {
+      console.error("Failed to update settings", err);
+    }
   };
 
-  const handleUpdateSettings = (newSettings: SettingsData) => {
-    setSettings(newSettings);
-    alert('Settings saved successfully!');
+  const handleDeleteExpense = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/transactions/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-auth-token': token || '' }
+      });
+      if (res.ok) {
+        setExpenses(prev => prev.filter(expense => expense.id !== id));
+      }
+    } catch (err) {
+      console.error("Failed to delete expense", err);
+    }
   };
 
-  const handleDeleteExpense = (id: string) => {
-    setExpenses(prev => prev.filter(expense => expense.id !== id));
+  const handleUpdateExpense = async (updatedExpense: Expense) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/transactions/${updatedExpense.id}`, {
+        method: 'PUT',
+        headers: {
+           'Content-Type': 'application/json',
+           'x-auth-token': token || ''
+        },
+        body: JSON.stringify(updatedExpense)
+      });
+
+      if (res.ok) {
+        const saved = await res.json();
+        setExpenses(prev => prev.map(expense => 
+          expense.id === saved.id ? saved : expense
+        ));
+      }
+    } catch (err) {
+      console.error("Failed to update expense", err);
+    }
   };
 
-  const handleUpdateExpense = (updatedExpense: Expense) => {
-    setExpenses(prev => prev.map(expense => 
-      expense.id === updatedExpense.id ? updatedExpense : expense
-    ));
-  };
-
-  const handleClearData = () => {
-    setExpenses([]);
-    setSettings({
-      allowance: 0,
-      startDate: new Date().toISOString().split('T')[0],
-      currency: 'CZK'
-    });
-    localStorage.removeItem('expenses');
-    localStorage.removeItem('settings');
-    window.location.reload();
+  const handleLogout = () => {
+    logout();
   };
 
   const renderContent = () => {
@@ -117,7 +199,7 @@ function App() {
           <Settings 
             settings={settings} 
             onUpdateSettings={handleUpdateSettings} 
-            onClearData={handleClearData}
+            onClearData={() => {}} // Disabled clear data for now or implement clear all
           />
         );
       default:
@@ -133,10 +215,28 @@ function App() {
   };
 
   return (
-    <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+    <Layout activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} user={user}>
       {renderContent()}
     </Layout>
   );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }
+
+const AppContent: React.FC = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  }
+
+  return isAuthenticated ? <AuthenticatedApp /> : <Login />;
+};
 
 export default App;

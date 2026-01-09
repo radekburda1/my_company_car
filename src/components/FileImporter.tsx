@@ -1,6 +1,7 @@
 import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import { Upload, FileSpreadsheet, Check, AlertCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { NOTIFICATIONS } from '../constants/messages';
 import './FileImporter.css';
 
 interface Expense {
@@ -44,7 +45,7 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
       if (jsonData.length === 0) {
-        throw new Error('File appears to be empty');
+        throw new Error(NOTIFICATIONS.ERROR.FILE_EMPTY);
       }
 
       // Normalize keys to lowercase for easier matching
@@ -62,7 +63,7 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
       const missingFields = requiredFields.filter(field => !Object.keys(firstRow).some(k => k.includes(field)));
 
       if (missingFields.length > 0) {
-        throw new Error(`Missing required columns: ${missingFields.join(', ')}. Please ensure your Excel file has Date and Amount columns.`);
+        throw new Error(NOTIFICATIONS.ERROR.MISSING_COLUMNS(missingFields.join(', ')));
       }
 
       // Transform data
@@ -97,7 +98,7 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
 
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Failed to parse file');
+      setError(err.message || NOTIFICATIONS.ERROR.FILE_PARSE_FAILED);
     } finally {
       setIsDragging(false);
     }
@@ -163,7 +164,7 @@ const FileImporter: React.FC<FileImporterProps> = ({ onImport }) => {
         {success && (
           <div className="file-importer-message file-importer-success">
             <Check size={16} />
-            Successfully imported expenses!
+            {NOTIFICATIONS.SUCCESS.FILE_IMPORTED}
           </div>
         )}
 

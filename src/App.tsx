@@ -8,6 +8,7 @@ import FileImporter from './components/FileImporter';
 import Login from './components/Login';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
+import { NOTIFICATIONS } from './constants/messages';
 
 interface Expense {
   id: string; // Will correspond to _id from MongoDB but mapped to id
@@ -76,11 +77,11 @@ const AuthenticatedApp: React.FC = () => {
         const savedExpense = await res.json();
         setExpenses(prev => [savedExpense, ...prev]);
         setActiveTab('expenses');
-        toast.success('Expense added successfully!');
+        toast.success(NOTIFICATIONS.SUCCESS.EXPENSE_ADDED);
       }
     } catch (err: any) {
       console.error("Failed to add expense", err);
-      toast.error('Failed to add expense');
+      toast.error(NOTIFICATIONS.ERROR.EXPENSE_ADD_FAILED);
     }
   };
 
@@ -127,11 +128,11 @@ const AuthenticatedApp: React.FC = () => {
         const updated = await res.json();
         setSettings(updated);
         updateSettings(updated);
-        toast.success('Settings saved successfully!');
+        toast.success(NOTIFICATIONS.SUCCESS.SETTINGS_SAVED);
       }
     } catch (err: any) {
       console.error("Failed to update settings", err);
-      toast.error(err.message || 'Failed to update settings');
+      toast.error(err.message || NOTIFICATIONS.ERROR.SETTINGS_UPDATE_FAILED);
     }
   };
 
@@ -144,11 +145,11 @@ const AuthenticatedApp: React.FC = () => {
       });
       if (res.ok) {
         setExpenses(prev => prev.filter(expense => expense.id !== id));
-        toast.success('Expense deleted');
+        toast.success(NOTIFICATIONS.SUCCESS.EXPENSE_DELETED);
       }
     } catch (err) {
       console.error("Failed to delete expense", err);
-      toast.error('Failed to delete expense');
+      toast.error(NOTIFICATIONS.ERROR.EXPENSE_DELETE_FAILED);
     }
   };
 
@@ -169,11 +170,11 @@ const AuthenticatedApp: React.FC = () => {
         setExpenses(prev => prev.map(expense => 
           expense.id === saved.id ? saved : expense
         ));
-        toast.success('Expense updated');
+        toast.success(NOTIFICATIONS.SUCCESS.EXPENSE_UPDATED);
       }
     } catch (err) {
       console.error("Failed to update expense", err);
-      toast.error('Failed to update expense');
+      toast.error(NOTIFICATIONS.ERROR.EXPENSE_UPDATE_FAILED);
     }
   };
 

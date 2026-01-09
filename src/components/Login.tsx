@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Lock, User } from 'lucide-react';
+import { NOTIFICATIONS } from '../constants/messages';
 
 import './Login.css';
 
@@ -29,7 +30,7 @@ const Login: React.FC = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.msg || 'Authentication failed');
+        throw new Error(data.msg || NOTIFICATIONS.ERROR.AUTH_FAILED);
       }
 
       login(data.token, data.user);

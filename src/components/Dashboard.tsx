@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, DollarSign, Calendar } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { formatCurrency } from '../utils/currency';
 import './Dashboard.css';
 
@@ -60,7 +60,33 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, allowance, startDate, c
     return data;
   };
 
+  const formatDate = (dateString: string) => {
+    const d = new Date(dateString);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
+  const getHighestExpensesData = () => {
+    const oneYearAgo = new Date();
+    oneYearAgo.setDate(oneYearAgo.getDate() - 365);
+
+    return [...expenses]
+      .filter(exp => new Date(exp.date) >= oneYearAgo)
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 10)
+      .map(exp => ({
+        name: `${formatDate(exp.date)} - ${exp.category}`,
+        amount: exp.amount,
+        description: exp.description,
+        date: formatDate(exp.date),
+        category: exp.category,
+      }));
+  };
+
   const chartData = getChartData();
+  const highestExpensesData = getHighestExpensesData();
 
   return (
     <div className="dashboard-container">
@@ -112,9 +138,10 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, allowance, startDate, c
         </div>
       </div>
 
-      {/* Chart Section */}
+      {/* Chart Section - Monthly Overview */}
       <div className="card dashboard-chart-card">
         <h3 className="dashboard-chart-title">Monthly Overview</h3>
+        <p className="dashboard-chart-subtitle">Allowance vs Spending over time</p>
         <div className="dashboard-chart-wrapper">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -149,6 +176,7 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, allowance, startDate, c
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
                 }}
                 itemStyle={{ fontSize: '13px' }}
+                formatter={(value: number | undefined) => [value !== undefined ? formatCurrency(value, currency) : '0', '']}
               />
               <Area 
                 type="monotone" 
@@ -169,6 +197,57 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, allowance, startDate, c
                 fill="url(#colorSpending)" 
               />
             </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Highest Expenses Chart */}
+      <div className="card dashboard-chart-card">
+        <h3 className="dashboard-chart-title">Highest Expenses</h3>
+        <p className="dashboard-chart-subtitle">Top 10 transactions in the last year</p>
+        <div className="dashboard-chart-wrapper bar-chart-wrapper">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={highestExpensesData}
+              layout="vertical"
+              margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgba(51, 65, 85, 0.3)" />
+              <XAxis type="number" hide />
+              <YAxis 
+                dataKey="name" 
+                type="category" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fill: '#94a3b8', fontSize: 11 }}
+                width={100}
+              />
+              <Tooltip
+                cursor={false}
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="custom-dashboard-tooltip">
+                        <div className="tooltip-header">
+                          <span className="tooltip-date">{data.date}</span>
+                          <span className="tooltip-category">{data.category}</span>
+                        </div>
+                        <div className="tooltip-amount">{formatCurrency(data.amount, currency)}</div>
+                        {data.description && <div className="tooltip-description">{data.description}</div>}
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar 
+                dataKey="amount" 
+                fill="#818cf8" 
+                radius={[0, 4, 4, 0]} 
+                activeBar={{ fill: '#a5b4fc' }}
+              />
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </div>

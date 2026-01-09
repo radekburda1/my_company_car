@@ -30,6 +30,29 @@
     gap: 3rem;
 }
 
+.hide-mobile {
+    display: flex;
+}
+
+.only-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .layout-header-content {
+        gap: 1rem;
+        justify-content: space-between;
+    }
+
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .only-mobile {
+        display: flex !important;
+    }
+}
+
 .layout-logo {
     display: flex;
     align-items: center;
@@ -115,6 +138,10 @@
 .layout-logout-button:hover {
     background-color: #dc2626;
     color: white;
+}
+
+.layout-user-mobile-info {
+    margin-left: auto;
 }
 
 @media (min-width: 768px) {

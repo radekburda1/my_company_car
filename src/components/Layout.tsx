@@ -30,10 +30,22 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTa
             </h1>
           </div>
           
-          <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          {user && (
+            <div className="layout-user-mobile-info only-mobile">
+               <span className="layout-user-name">
+                {user.username}
+              </span>
+            </div>
+          )}
+
+          <Navigation 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab} 
+            onLogout={onLogout}
+          />
 
           {user && (
-            <div className="layout-user-section">
+            <div className="layout-user-section hide-mobile">
               <span className="layout-user-name">
                 {user.username}
               </span>

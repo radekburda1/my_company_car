@@ -1,13 +1,14 @@
 import React from 'react';
-import { LayoutDashboard, List, PlusCircle, Settings, Menu, X } from 'lucide-react';
+import { LayoutDashboard, List, PlusCircle, Settings, Menu, X, LogOut } from 'lucide-react';
 import './Navigation.css';
 
 interface NavigationProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  onLogout?: () => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
+export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, onLogout }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const navItems = [
@@ -47,6 +48,19 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab 
             </button>
           );
         })}
+
+        {isOpen && onLogout && (
+          <>
+            <div className="navigation-separator" />
+            <button
+              onClick={onLogout}
+              className="navigation-button logout-item"
+            >
+              <LogOut size={18} />
+              <span>Sign Out</span>
+            </button>
+          </>
+        )}
       </div>
       
       {isOpen && <div className="mobile-menu-overlay" onClick={() => setIsOpen(false)} />}

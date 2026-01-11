@@ -23,7 +23,9 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": [
-        "src"
+        "src",
+        "api",
+        "server"
     ],
     "references": [
         {

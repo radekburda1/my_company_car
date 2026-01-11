@@ -27,7 +27,7 @@ if (mongoURI) {
   console.warn('MONGODB_URI is not defined. Skipping database connection for now.');
 }
 
-app.get('/api', (req: Request, res: Response) => {
+app.get('/api', (_req: Request, res: Response) => {
   res.send('My Company Car API is running (TypeScript) on Vercel');
 });
 

@@ -1,5 +1,4 @@
 import express, { Response, NextFunction } from 'express';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User';
 import { AuthRequest } from '../types/express';

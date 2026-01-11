@@ -10,7 +10,27 @@ const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [signUpAllowed, setSignUpAllowed] = useState(true);
   const { login } = useAuth();
+
+  React.useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/auth/signup-status');
+        if (res.ok) {
+          const data = await res.json();
+          const allowed = data.signUpAllowed;
+          setSignUpAllowed(allowed);
+          if (!allowed) {
+            setIsLogin(true);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch signup status", err);
+      }
+    };
+    fetchStatus();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,12 +130,18 @@ const Login: React.FC = () => {
         </form>
 
         <div className="login-footer">
-          <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="login-toggle-btn"
-          >
-            {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
-          </button>
+          {signUpAllowed ? (
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="login-toggle-btn"
+            >
+              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+            </button>
+          ) : (
+            <p className="registration-closed-text">
+              Registration of new users is not allowed
+            </p>
+          )}
         </div>
       </div>
     </div>

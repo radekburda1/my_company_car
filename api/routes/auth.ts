@@ -1,6 +1,7 @@
-import express, { Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User.js';
+import AppSettings from '../models/AppSettings.js';
 import { AuthRequest } from '../types/express.js';
 
 const router = express.Router();
@@ -26,6 +27,11 @@ router.post('/register', async (req: AuthRequest, res: Response) => {
   const { username, password } = req.body;
 
   try {
+    const settings = await AppSettings.findOne();
+    if (!settings || !settings.signUpAllowed) {
+      return res.status(403).json({ msg: 'Registration is currently closed' });
+    }
+
     let user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ msg: 'User already exists' });
@@ -105,6 +111,19 @@ router.put('/settings', auth, async (req: AuthRequest, res: Response) => {
     await user.save();
 
     res.json(user.settings);
+  } catch (err: any) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   GET api/auth/signup-status
+// @desc    Check if registration is allowed
+// @access  Public
+router.get('/signup-status', async (_req: Request, res: Response) => {
+  try {
+    const settings = await AppSettings.findOne();
+    res.json({ signUpAllowed: settings ? settings.signUpAllowed : false });
   } catch (err: any) {
     console.error(err.message);
     res.status(500).send('Server error');

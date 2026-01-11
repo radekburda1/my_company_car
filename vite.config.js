@@ -12,4 +12,15 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-utils': ['recharts', 'lucide-react', 'xlsx'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
 })

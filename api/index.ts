@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRoutes from '../server/routes/auth';
-import transactionRoutes from '../server/routes/transactions';
+import authRoutes from './routes/auth.js';
+import transactionRoutes from './routes/transactions.js';
 
 dotenv.config();
 

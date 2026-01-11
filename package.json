@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "dev:server": "cd server && nodemon index.ts",
+    "dev:server": "npx tsx watch server/index.ts",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -39,7 +39,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "nodemon": "^3.1.11",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.9.3",
     "vite": "^5.0.8"
   }

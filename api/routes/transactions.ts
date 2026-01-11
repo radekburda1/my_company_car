@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
-import Transaction from '../models/Transaction';
-import { auth } from './auth';
-import { AuthRequest } from '../types/express';
+import Transaction from '../models/Transaction.js';
+import { auth } from './auth.js';
+import { AuthRequest } from '../types/express.js';
 
 const router = express.Router();
 
